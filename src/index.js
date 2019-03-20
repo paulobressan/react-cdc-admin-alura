@@ -5,9 +5,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { BrowserRouter, Route } from 'react-router-dom'
+import AutorBox from './Autor';
 
 // Renderizando o componente App para a lacuna no arquivo index.html
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+    //Criando roteamento da aplicação com o pacote react-router-dom
+    <BrowserRouter>
+        {/* Definindo rotas */}
+        <Route path="/" component={App} />
+        <Route path="/autor" component={AutorBox} />
+        <Route path="/livro" />
+    </BrowserRouter>,
+    document.getElementById('root'));
 
 // O trabalho do jsx é retirar o dev o trabalho de criar elementos atraves de funções e sim com tags xml.
 //ReactDOM.render(React.createElement(App), document.getElementById('root'));

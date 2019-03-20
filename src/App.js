@@ -5,7 +5,8 @@ import React, { Component } from 'react';
 //Importando os css que vai ser utilizado para o layout da aplicação
 import './css/pure-min.css';
 import './css/side-menu.css';
-import AutorBox from './Autor'
+// Pacote responsavel por criar Link SPA
+import { Link } from 'react-router-dom'
 
 // Criando um component
 class App extends Component {
@@ -19,21 +20,20 @@ class App extends Component {
 
         <div id="menu">
           <div className="pure-menu">
-            <a className="pure-menu-heading" href="#">Company</a>
+            <Link className="pure-menu-heading" to="/">Company</Link>
 
             <ul className="pure-menu-list">
-              <li className="pure-menu-item"><a href="#" className="pure-menu-link">Home</a></li>
-              <li className="pure-menu-item"><a href="#" className="pure-menu-link">Autor</a></li>
-              <li className="pure-menu-item"><a href="#" className="pure-menu-link">Livros</a></li>
+              <li className="pure-menu-item">
+                <Link to="/" className="pure-menu-link">Home</Link>
+              </li>
+              <li className="pure-menu-item">
+                <Link to="/autor" className="pure-menu-link">Autor</Link>
+              </li>
+              <li className="pure-menu-item">
+                <Link to="/livros" className="pure-menu-link">Livro</Link>
+              </li>
             </ul>
           </div>
-        </div>
-
-        <div id="main">
-          <div className="header">
-            <h1>Cadastro de Autores</h1>
-          </div>
-          <AutorBox></AutorBox>
         </div>
       </div>
     );
