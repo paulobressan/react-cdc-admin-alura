@@ -5,17 +5,22 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import AutorBox from './Autor';
+import Home from './Home';
 
 // Renderizando o componente App para a lacuna no arquivo index.html
 ReactDOM.render(
     //Criando roteamento da aplicação com o pacote react-router-dom
     <BrowserRouter>
-        {/* Definindo rotas */}
-        <Route path="/" component={App} />
-        <Route path="/autor" component={AutorBox} />
-        <Route path="/livro" />
+        <App>
+            <Switch>
+                {/* Definindo rotas */}
+                <Route path="/" component={Home} />
+                <Route path="/autor" component={AutorBox} />
+                <Route path="/livro" />
+            </Switch>
+        </App>
     </BrowserRouter>,
     document.getElementById('root'));
 
