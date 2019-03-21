@@ -136,7 +136,7 @@ export default class AutorBox extends Component {
             dataType: 'json',
             success: (resposta) => {
                 // Alterando o estado do componente
-                this.setState({ lista: resposta, nome: '', email: '', senha: '' });
+                this.setState({ lista: resposta });
             }
         });
     }

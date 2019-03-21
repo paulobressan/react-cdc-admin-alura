@@ -1,14 +1,30 @@
-import React, { Component } from 'react'
-import InputCustomizado from './componentes/inputCustomizado'
+import React, { Component } from 'react';
+import InputCustomizado from './componentes/inputCustomizado';
+import $ from 'jquery';
+import TratadorErrors from './TratadorErrors';
+import PubSub from 'pubsub-js';
+import SelectAutoresCustomizado from './componentes/selectAutoresCustomizado';
+
 
 class FormularioLivro extends Component {
     constructor() {
         super();
-        this.state = { titulo: '', preco: 0, autorId: 0 };
+        this.state = { autores: [], titulo: '', preco: 0, autorId: 0 };
         this.setTitulo = this.setTitulo.bind(this);
         this.setPreco = this.setPreco.bind(this);
         this.setAutorId = this.setAutorId.bind(this);
         this.enviaForm = this.enviaForm.bind(this);
+    }
+
+    componentWillMount() {
+        $.ajax({
+            url: "http://localhost:8080/api/autores",
+            dataType: 'json',
+            success: (resposta) => {
+                // Alterando o estado do componente
+                this.setState({ autores: resposta });
+            }
+        });
     }
 
     render() {
@@ -17,7 +33,7 @@ class FormularioLivro extends Component {
                 <form className="pure-form pure-form-aligned" onSubmit={this.enviaForm}>
                     <InputCustomizado type="text" id="titulo" name="titulo" value={this.state.titulo} onChange={this.setTitulo} label="Titulo"></InputCustomizado>
                     <InputCustomizado type="number" id="preco" name="preco" value={this.state.preco} onChange={this.setPreco} label="Preço"></InputCustomizado>
-                    <InputCustomizado type="number" id="autorId" name="autorId" value={this.state.autorId} onChange={this.setAutorId} label="Autor Id"></InputCustomizado>
+                    <SelectAutoresCustomizado lista={this.state.autores} onChange={this.setAutorId} autorId={this.state.autorId}></SelectAutoresCustomizado>
                     <div className="pure-control-group">
                         <label></label>
                         <button type="submit" className="pure-button pure-button-primary">Gravar</button>
@@ -30,8 +46,28 @@ class FormularioLivro extends Component {
 
     enviaForm(e) {
         e.preventDefault();
-        this.props.lista.push({id:1,titulo:this.state.titulo, preco:this.state.preco, autorId:this.state.autorId})
-        this.props.callbackAtualizaListagem(this.props.lista)
+        $.ajax({
+            url: "http://localhost:8080/api/livros",
+            dataType: 'json',
+            contentType: 'application/json',
+            method: 'POST',
+            data: JSON.stringify({ titulo: this.state.titulo, preco: this.state.preco, autorId: this.state.autorId }),
+            success: (resposta) => {
+                // Executando callback para atualizar a lista do componente AutorBox que une os dois componentes, lista e formulario.
+                // Quando adicionar um novo registro, vamos atualizar a listagem do estado do componente AutorBox que vai atualizar a tabela
+                // Porque passamos para a tabela o estado da lista.
+                this.props.callbackAtualizaListagem(resposta);
+                this.limparFormulario();
+            },
+            error: (err) => {
+                if (err.status === 400) {
+                    new TratadorErrors().publicaErrors(err.responseJSON)
+                }
+            },
+            beforeSend: () => {
+                PubSub.publish('limpa-erros', {})
+            }
+        })
     }
 
     setTitulo(e) {
@@ -42,7 +78,7 @@ class FormularioLivro extends Component {
         this.setState({ preco: e.target.value });
     }
 
-    setAutorId(e) {
+    setAutorId(e) {        
         this.setState({ autorId: e.target.value });
     }
 
@@ -61,7 +97,7 @@ class TabelaLivro extends Component {
                         <tr>
                             <th>Titulo</th>
                             <th>Preço</th>
-                            <th>Autor Id</th>
+                            <th>Autor</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -75,7 +111,7 @@ class TabelaLivro extends Component {
                                     <tr key={livro.id}>
                                         <td>{livro.titulo}</td>
                                         <td>{livro.preco}</td>
-                                        <td>{livro.autorId}</td>
+                                        <td>{livro.autor.nome}</td>
                                     </tr>
                                 );
                             })
@@ -88,25 +124,36 @@ class TabelaLivro extends Component {
 }
 
 
-export default class LivroBox extends Component{
-    constructor(){
+export default class LivroBox extends Component {
+    constructor() {
         super();
-        this.state = {lista:[]};
+        this.state = { lista: [] };
         this.atualizaListagem = this.atualizaListagem.bind(this);
     }
 
-    atualizaListagem(novaLista){
-        this.setState({lista:novaLista})
+    //Ciclo de vida react
+    componentDidMount() {
+        $.ajax({
+            url: "http://localhost:8080/api/livros",
+            dataType: 'json',
+            success: (resposta) => {
+                this.setState({ lista: resposta })
+            }
+        })
     }
 
-    render(){
-        return(
+    atualizaListagem(novaLista) {
+        this.setState({ lista: novaLista })
+    }
+
+    render() {
+        return (
             <div>
                 <div className="header">
                     <h1>CADASTRO DE LIVROS</h1>
                 </div>
                 <div className="content" id="content">
-                    <FormularioLivro lista={this.state.lista} callbackAtualizaListagem={this.atualizaListagem}></FormularioLivro>
+                    <FormularioLivro callbackAtualizaListagem={this.atualizaListagem}></FormularioLivro>
                     <TabelaLivro lista={this.state.lista}></TabelaLivro>
                 </div>
             </div>
