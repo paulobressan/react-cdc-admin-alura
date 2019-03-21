@@ -22,13 +22,11 @@ export default class SelectAutoresCustomizado extends Component {
         return (
             <div className="pure-control-group">
                 <label htmlFor="autorId">Autores</label>
-                <select id="autorId" name="autorId" onChange={this.props.onChange}>
+                {/* O value no select não existe em um html comum, mas o react disponibiliza para a seleção de uma option */}
+                <select value={this.props.autorId} id="autorId" name="autorId" onChange={this.props.onChange}>
+                    <option value="">Selecionar</option>
                     {
-                        this.props.lista.map(autor => {
-                            if(autor.id ===this.props.autorId)
-                                return <option key={autor.id} selected value={autor.id}>{autor.nome}</option>
-                            return <option key={autor.id} value={autor.id}>{autor.nome}</option>
-                        })
+                        this.props.lista.map(autor => <option key={autor.id} value={autor.id}>{autor.nome}</option>)
                     }
                 </select>
                 <span className="error">{this.state.msgError}</span>

@@ -12,9 +12,6 @@ class FormularioAutor extends Component {
 
         // Atribuindo ao enviaForm o contexto do react, ou seja da nossa classe, porque esses metodos são chamados no html e o contexto é outro. 
         this.enviaForm = this.enviaForm.bind(this);
-        this.setNome = this.setNome.bind(this);
-        this.setEmail = this.setEmail.bind(this);
-        this.setSenha = this.setSenha.bind(this);
     }
 
     enviaForm(evento) {
@@ -49,19 +46,13 @@ class FormularioAutor extends Component {
         });
     }
 
-    setNome(evento) {
-        //Alterando o estado da propriedade nome
-        this.setState({ nome: evento.target.value });
-    }
+    salvaAlteracao(nomeInput, e) {
+        let campo = {};
 
-    setEmail(evento) {
-        //Alterando o estado da propriedade email
-        this.setState({ email: evento.target.value });
-    }
-
-    setSenha(evento) {
-        //Alterando o estado da propriedade senha
-        this.setState({ senha: evento.target.value });
+        campo[nomeInput] = e.target.value;
+        console.log(campo);
+        this.setState(campo);
+        console.log(this.state)
     }
 
     limparFormulario() {
@@ -72,9 +63,9 @@ class FormularioAutor extends Component {
         return (
             <div className="pure-form pure-form-aligned">
                 <form className="pure-form pure-form-aligned" onSubmit={this.enviaForm}>
-                    <InputCustomizado type="text" id="nome" name="nome" value={this.state.nome} onChange={this.setNome} label="Nome"></InputCustomizado>
-                    <InputCustomizado type="email" id="email" name="email" value={this.state.email} onChange={this.setEmail} label="Email"></InputCustomizado>
-                    <InputCustomizado type="password" id="senha" name="senha" value={this.state.senha} onChange={this.setSenha} label="Senha"></InputCustomizado>
+                    <InputCustomizado type="text" id="nome" name="nome" value={this.state.nome} onChange={this.salvaAlteracao.bind(this, 'nome')} label="Nome"></InputCustomizado>
+                    <InputCustomizado type="email" id="email" name="email" value={this.state.email} onChange={this.salvaAlteracao.bind(this, 'email')} label="Email"></InputCustomizado>
+                    <InputCustomizado type="password" id="senha" name="senha" value={this.state.senha} onChange={this.salvaAlteracao.bind(this, 'senha')} label="Senha"></InputCustomizado>
                     <div className="pure-control-group">
                         <label></label>
                         <button type="submit" className="pure-button pure-button-primary">Gravar</button>

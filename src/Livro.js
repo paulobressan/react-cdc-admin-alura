@@ -83,7 +83,7 @@ class FormularioLivro extends Component {
     }
 
     limparFormulario() {
-        this.setState({ titulo: '', preco: 0, autorId: 0 });
+        this.setState({ titulo: '', preco: 0, autorId: '' });
     }
 }
 
