@@ -30,7 +30,7 @@ class App extends Component {
                 <Link to="/autor" className="pure-menu-link">Autor</Link>
               </li>
               <li className="pure-menu-item">
-                <Link to="/livros" className="pure-menu-link">Livro</Link>
+                <Link to="/livro" className="pure-menu-link">Livro</Link>
               </li>
             </ul>
           </div>

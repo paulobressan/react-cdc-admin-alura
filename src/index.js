@@ -8,6 +8,7 @@ import * as serviceWorker from './serviceWorker';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import AutorBox from './Autor';
 import Home from './Home';
+import LivroBox from './Livro';
 
 // Renderizando o componente App para a lacuna no arquivo index.html
 ReactDOM.render(
@@ -18,7 +19,7 @@ ReactDOM.render(
                 {/* Definindo rotas */}
                 <Route exact path="/" component={Home} />
                 <Route path="/autor" component={AutorBox} />
-                <Route path="/livro" />
+                <Route path="/livro" component={LivroBox}/>
             </Switch>
         </App>
     </BrowserRouter>,
