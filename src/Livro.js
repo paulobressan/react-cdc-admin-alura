@@ -31,9 +31,9 @@ class FormularioLivro extends Component {
         return (
             <div className="pure-form pure-form-aligned">
                 <form className="pure-form pure-form-aligned" onSubmit={this.enviaForm}>
-                    <InputCustomizado type="text" id="titulo" name="titulo" value={this.state.titulo} onChange={this.setTitulo} label="Titulo"></InputCustomizado>
-                    <InputCustomizado type="number" id="preco" name="preco" value={this.state.preco} onChange={this.setPreco} label="Preço"></InputCustomizado>
-                    <SelectAutoresCustomizado lista={this.state.autores} onChange={this.setAutorId} autorId={this.state.autorId}></SelectAutoresCustomizado>
+                    <InputCustomizado type="text" id="titulo" name="titulo" value={this.state.titulo} onChange={this.salvaAlteracao.bind(this, 'titulo')} label="Titulo"></InputCustomizado>
+                    <InputCustomizado type="number" id="preco" name="preco" value={this.state.preco} onChange={this.salvaAlteracao.bind(this, 'preco')} label="Preço"></InputCustomizado>
+                    <SelectAutoresCustomizado lista={this.state.autores} onChange={this.salvaAlteracao.bind(this, 'autorId')} autorId={this.state.autorId}></SelectAutoresCustomizado>
                     <div className="pure-control-group">
                         <label></label>
                         <button type="submit" className="pure-button pure-button-primary">Gravar</button>
@@ -70,16 +70,10 @@ class FormularioLivro extends Component {
         })
     }
 
-    setTitulo(e) {
-        this.setState({ titulo: e.target.value });
-    }
-
-    setPreco(e) {
-        this.setState({ preco: e.target.value });
-    }
-
-    setAutorId(e) {        
-        this.setState({ autorId: e.target.value });
+    salvaAlteracao(nomeInput, e) {
+        let campo = {};
+        campo[nomeInput] = e.target.value
+        this.setState(campo);
     }
 
     limparFormulario() {
